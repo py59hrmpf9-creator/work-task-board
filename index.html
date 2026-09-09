@@ -4,85 +4,751 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111827">
-<title>仕事整理ボード 試作版</title>
+<title>仕事整理ボード</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:#f3f4f6;color:#111827}
-header{background:#111827;color:white;padding:18px 16px calc(14px + env(safe-area-inset-top));position:sticky;top:0;z-index:3}
-h1{font-size:20px;margin:0 0 10px}.sub{font-size:12px;opacity:.75}
-main{max-width:760px;margin:auto;padding:14px 12px 80px}.card{background:white;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 5px #00000010}
-label{display:block;font-size:13px;font-weight:700;margin:10px 0 5px}input,select,textarea,button{font:inherit}input,select,textarea{width:100%;padding:11px;border:1px solid #d1d5db;border-radius:10px;background:white}textarea{min-height:70px;resize:vertical}
-button{border:0;border-radius:10px;padding:10px 13px;font-weight:700;cursor:pointer}.primary{background:#111827;color:#fff;width:100%;margin-top:12px}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}.tab{background:#e5e7eb;font-size:12px;padding:9px 4px}.tab.active{background:#111827;color:#fff}
-.task{border-left:5px solid #9ca3af;padding:12px;margin:8px 0;background:#f9fafb;border-radius:10px}.task.red{border-color:#ef4444}.task.orange{border-color:#f59e0b}.task.yellow{border-color:#eab308}.task.green{border-color:#22c55e}
-.row{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.title{font-weight:800}.meta{font-size:12px;color:#6b7280;margin-top:6px}.actions{display:flex;gap:6px;margin-top:10px}.actions button{font-size:12px;background:#e5e7eb}.done{opacity:.55}.done .title{text-decoration:line-through}
-.badge{display:inline-block;font-size:11px;padding:4px 7px;border-radius:99px;background:#e5e7eb;margin-top:6px}.empty{text-align:center;color:#6b7280;padding:25px}.danger{background:#fee2e2;color:#991b1b}.secondary{background:#e5e7eb}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{text-align:center;background:#f9fafb;padding:10px;border-radius:10px}.num{font-size:20px;font-weight:800}.small{font-size:11px;color:#6b7280}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+  background:#f3f4f6;
+  color:#111827
+}
+header{
+  background:#111827;
+  color:white;
+  padding:18px 16px calc(14px + env(safe-area-inset-top));
+  position:sticky;
+  top:0;
+  z-index:3
+}
+h1{font-size:20px;margin:0 0 10px}
+.sub{font-size:12px;opacity:.75}
+main{max-width:760px;margin:auto;padding:14px 12px 80px}
+.card{
+  background:white;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:0 1px 5px #00000010
+}
+label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  margin:10px 0 5px
+}
+input,select,textarea,button{font:inherit}
+input,select,textarea{
+  width:100%;
+  padding:11px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  background:white
+}
+textarea{min-height:70px;resize:vertical}
+button{
+  border:0;
+  border-radius:10px;
+  padding:10px 13px;
+  font-weight:700;
+  cursor:pointer
+}
+.primary{
+  background:#111827;
+  color:#fff;
+  width:100%;
+  margin-top:12px
+}
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+  margin-bottom:12px
+}
+.tab{
+  background:#e5e7eb;
+  font-size:12px;
+  padding:9px 4px
+}
+.tab.active{
+  background:#111827;
+  color:#fff
+}
+.task{
+  border-left:5px solid #9ca3af;
+  padding:12px;
+  margin:8px 0;
+  background:#f9fafb;
+  border-radius:10px
+}
+.task.red{border-color:#ef4444}
+.task.orange{border-color:#f59e0b}
+.task.yellow{border-color:#eab308}
+.task.green{border-color:#22c55e}
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:flex-start
+}
+.title{font-weight:800}
+.meta{
+  font-size:12px;
+  color:#6b7280;
+  margin-top:6px
+}
+.actions{
+  display:flex;
+  gap:6px;
+  margin-top:10px
+}
+.actions button{
+  font-size:12px;
+  background:#e5e7eb
+}
+.done{opacity:.55}
+.done .title{text-decoration:line-through}
+.badge{
+  display:inline-block;
+  font-size:11px;
+  padding:4px 7px;
+  border-radius:99px;
+  background:#e5e7eb;
+  margin-top:6px
+}
+.empty{
+  text-align:center;
+  color:#6b7280;
+  padding:25px
+}
+.danger{
+  background:#fee2e2;
+  color:#991b1b
+}
+.secondary{background:#e5e7eb}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px
+}
+.stat{
+  text-align:center;
+  background:#f9fafb;
+  padding:10px;
+  border-radius:10px
+}
+.num{font-size:20px;font-weight:800}
+.small{font-size:11px;color:#6b7280}
+
+#loginBox{
+  max-width:420px;
+  margin:40px auto;
+  padding:20px;
+  background:white;
+  border-radius:14px;
+  box-shadow:0 1px 5px #00000010
+}
+#app{display:none}
+#userArea{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  margin-top:8px
+}
+#userEmail{
+  font-size:11px;
+  opacity:.75;
+  overflow:hidden;
+  text-overflow:ellipsis
+}
+.logout{
+  background:#374151;
+  color:white;
+  font-size:11px;
+  padding:6px 9px
+}
+.status{
+  font-size:12px;
+  margin-top:8px;
+  color:#6b7280
+}
 </style>
 </head>
+
 <body>
-<header><h1>仕事整理ボード</h1><div class="sub">マルチタスクをシングルタスク化するための試作版</div></header>
+
+<div id="loginBox">
+  <h2 style="margin-top:0">仕事整理ボード</h2>
+
+  <label>メールアドレス</label>
+  <input id="loginEmail" type="email" placeholder="メールアドレス">
+
+  <label>パスワード</label>
+  <input id="loginPassword" type="password" placeholder="パスワード">
+
+  <button class="primary" onclick="login()">ログイン</button>
+
+  <div id="loginStatus" class="status"></div>
+</div>
+
+
+<div id="app">
+
+<header>
+  <h1>仕事整理ボード</h1>
+  <div class="sub">マルチタスクをシングルタスク化するための試作版</div>
+
+  <div id="userArea">
+    <div id="userEmail"></div>
+    <button class="logout" onclick="logout()">ログアウト</button>
+  </div>
+</header>
+
 <main>
+
 <section class="card">
 <h2 style="font-size:16px;margin:0">タスクを追加</h2>
-<label>タスク名</label><input id="title" placeholder="例：田中さんに見積確認を依頼">
-<label>締切</label><input id="due" type="date">
-<label>所要時間（分）</label><input id="mins" type="number" min="1" placeholder="例：10">
-<label>他人に依頼・確認が必要？</label><select id="delegate"><option value="no">いいえ</option><option value="yes">はい</option></select>
-<label>3営業日以上かかりそう？</label><select id="long"><option value="no">いいえ</option><option value="yes">はい</option></select>
-<label>プロジェクト</label><input id="project" placeholder="例：A社案件">
-<label>メモ</label><textarea id="note" placeholder="補足"></textarea>
+
+<label>タスク名</label>
+<input id="title" placeholder="例：田中さんに見積確認を依頼">
+
+<label>締切</label>
+<input id="due" type="date">
+
+<label>所要時間（分）</label>
+<input id="mins" type="number" min="1" placeholder="例：10">
+
+<label>他人に依頼・確認が必要？</label>
+<select id="delegate">
+<option value="no">いいえ</option>
+<option value="yes">はい</option>
+</select>
+
+<label>3営業日以上かかりそう？</label>
+<select id="long">
+<option value="no">いいえ</option>
+<option value="yes">はい</option>
+</select>
+
+<label>プロジェクト</label>
+<input id="project" placeholder="例：A社案件">
+
+<label>メモ</label>
+<textarea id="note" placeholder="補足"></textarea>
+
 <button class="primary" onclick="addTask()">分類して追加</button>
 </section>
 
-<section class="card">
-<div class="stats"><div class="stat"><div class="num" id="total">0</div><div class="small">全タスク</div></div><div class="stat"><div class="num" id="open">0</div><div class="small">未完了</div></div><div class="stat"><div class="num" id="done">0</div><div class="small">完了</div></div></div>
-</section>
 
 <section class="card">
-<div class="tabs">
-<button class="tab active" data-filter="all">全部</button><button class="tab" data-filter="today">今日</button><button class="tab" data-filter="open">未完了</button><button class="tab" data-filter="done">完了</button>
+<div class="stats">
+<div class="stat">
+<div class="num" id="total">0</div>
+<div class="small">全タスク</div>
 </div>
-<input id="search" placeholder="過去のタスクを検索…">
-<div id="list"></div>
+
+<div class="stat">
+<div class="num" id="open">0</div>
+<div class="small">未完了</div>
+</div>
+
+<div class="stat">
+<div class="num" id="done">0</div>
+<div class="small">完了</div>
+</div>
+</div>
 </section>
 
+
 <section class="card">
-<button class="secondary" style="width:100%" onclick="exportCSV()">CSVバックアップ</button>
-<button class="danger" style="width:100%;margin-top:8px" onclick="clearDone()">完了済みを削除</button>
+
+<div class="tabs">
+<button class="tab active" data-filter="all">全部</button>
+<button class="tab" data-filter="today">今日</button>
+<button class="tab" data-filter="open">未完了</button>
+<button class="tab" data-filter="done">完了</button>
+</div>
+
+<input id="search" placeholder="過去のタスクを検索…">
+
+<div id="list"></div>
+
 </section>
+
+
+<section class="card">
+
+<button class="secondary" style="width:100%" onclick="exportCSV()">
+CSVバックアップ
+</button>
+
+<button class="danger" style="width:100%;margin-top:8px" onclick="clearDone()">
+完了済みを削除
+</button>
+
+</section>
+
 </main>
-<script>
-let tasks=JSON.parse(localStorage.getItem("workTasks")||"[]");let filter="all";
-const $=id=>document.getElementById(id);
-function save(){localStorage.setItem("workTasks",JSON.stringify(tasks));render()}
+</div>
+
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+  doc,
+  onSnapshot,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCKFdvb3acRMJv9pdVTP0luTX0VQJ8cKgA",
+  authDomain: "work-task-board-313f6.firebaseapp.com",
+  projectId: "work-task-board-313f6",
+  storageBucket: "work-task-board-313f6.firebasestorage.app",
+  messagingSenderId: "80196494671",
+  appId: "1:80196494671:web:222415f08316af765f913a",
+  measurementId: "G-EN00GBMZGX"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let tasks = [];
+let filter = "all";
+let unsubscribeTasks = null;
+
+
+const $ = id => document.getElementById(id);
+
+
+window.login = async function(){
+
+  const email = $("loginEmail").value.trim();
+  const password = $("loginPassword").value;
+
+  if(!email || !password){
+    $("loginStatus").textContent = "メールアドレスとパスワードを入力してください";
+    return;
+  }
+
+  try{
+
+    $("loginStatus").textContent = "ログイン中…";
+
+    await signInWithEmailAndPassword(auth,email,password);
+
+  }catch(error){
+
+    console.error(error);
+
+    $("loginStatus").textContent =
+      "ログインできませんでした。メールアドレスまたはパスワードを確認してください。";
+
+  }
+};
+
+
+window.logout = async function(){
+
+  await signOut(auth);
+
+};
+
+
+onAuthStateChanged(auth,user=>{
+
+  if(user){
+
+    $("loginBox").style.display="none";
+    $("app").style.display="block";
+
+    $("userEmail").textContent=user.email || "";
+
+    startFirestore();
+
+  }else{
+
+    $("loginBox").style.display="block";
+    $("app").style.display="none";
+
+    if(unsubscribeTasks){
+      unsubscribeTasks();
+      unsubscribeTasks=null;
+    }
+
+  }
+
+});
+
+
+function startFirestore(){
+
+  const tasksRef=collection(db,"tasks");
+
+  const q=query(tasksRef,orderBy("created","desc"));
+
+  unsubscribeTasks=onSnapshot(q,snapshot=>{
+
+    tasks=snapshot.docs.map(d=>({
+
+      id:d.id,
+      ...d.data()
+
+    }));
+
+    render();
+
+  },error=>{
+
+    console.error(error);
+
+    alert("Firestoreからタスクを読み込めませんでした。");
+
+  });
+
+}
+
+
 function classify(t){
- if(t.delegate==="yes") return ["red","① 他人にボールを渡す"];
- if(Number(t.mins)>0&&Number(t.mins)<=10) return ["orange","② 10分以内"];
- if(t.long==="yes") return ["yellow","③ 3営業日以上 → 分解"];
- return ["green","④ 締切順"];
+
+  if(t.delegate==="yes")
+    return ["red","① 他人にボールを渡す"];
+
+  if(Number(t.mins)>0 && Number(t.mins)<=10)
+    return ["orange","② 10分以内"];
+
+  if(t.long==="yes")
+    return ["yellow","③ 3営業日以上 → 分解"];
+
+  return ["green","④ 締切順"];
+
 }
-function addTask(){
- const title=$("title").value.trim(); if(!title){alert("タスク名を入力してください");return}
- let t={id:Date.now(),title,due:$("due").value,mins:$("mins").value,delegate:$("delegate").value,long:$("long").value,project:$("project").value.trim(),note:$("note").value.trim(),done:false,created:new Date().toISOString()};
- tasks.push(t);["title","due","mins","project","note"].forEach(x=>$(x).value="");save();
+
+
+window.addTask=async function(){
+
+  const title=$("title").value.trim();
+
+  if(!title){
+    alert("タスク名を入力してください");
+    return;
+  }
+
+  const t={
+
+    title:title,
+    due:$("due").value,
+    mins:$("mins").value,
+    delegate:$("delegate").value,
+    long:$("long").value,
+    project:$("project").value.trim(),
+    note:$("note").value.trim(),
+    done:false,
+    created:new Date().toISOString()
+
+  };
+
+  try{
+
+    await addDoc(collection(db,"tasks"),t);
+
+    ["title","due","mins","project","note"]
+      .forEach(x=>$(x).value="");
+
+  }catch(error){
+
+    console.error(error);
+
+    alert("タスクを保存できませんでした。");
+
+  }
+
+};
+
+
+function today(){
+
+  return new Date().toISOString().slice(0,10);
+
 }
-function today(){return new Date().toISOString().slice(0,10)}
+
+
 function render(){
- const q=$("search").value.toLowerCase(); let arr=tasks.filter(t=>{
-  if(filter==="today"&&t.due!==today())return false;if(filter==="open"&&t.done)return false;if(filter==="done"&&!t.done)return false;
-  return (t.title+" "+t.project+" "+t.note).toLowerCase().includes(q)
- });
- arr.sort((a,b)=>{if(a.done!==b.done)return a.done?1:-1; if(a.due&&b.due)return a.due.localeCompare(b.due);return a.created.localeCompare(b.created)});
- $("list").innerHTML=arr.length?arr.map(t=>{let[c,label]=classify(t);return `<div class="task ${c} ${t.done?"done":""}">
- <div class="row"><div><div class="title">${esc(t.title)}</div><span class="badge">${label}</span></div><button onclick="toggle(${t.id})">${t.done?"未完了":"完了"}</button></div>
- <div class="meta">${t.due?"締切："+t.due+"　":""}${t.mins?"所要："+t.mins+"分　":""}${t.project?"案件："+esc(t.project):""}</div>
- ${t.note?`<div class="meta">${esc(t.note)}</div>`:""}
- <div class="actions"><button onclick="removeTask(${t.id})">削除</button></div></div>`}).join(""):'<div class="empty">該当するタスクはありません</div>';
- $("total").textContent=tasks.length;$("open").textContent=tasks.filter(t=>!t.done).length;$("done").textContent=tasks.filter(t=>t.done).length;
- document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.filter===filter));
+
+  const q=$("search").value.toLowerCase();
+
+  let arr=tasks.filter(t=>{
+
+    if(filter==="today" && t.due!==today())
+      return false;
+
+    if(filter==="open" && t.done)
+      return false;
+
+    if(filter==="done" && !t.done)
+      return false;
+
+    return (
+
+      (t.title||"")+" "+
+      (t.project||"")+" "+
+      (t.note||"")
+
+    ).toLowerCase().includes(q);
+
+  });
+
+
+  arr.sort((a,b)=>{
+
+    if(a.done!==b.done)
+      return a.done?1:-1;
+
+    if(a.due && b.due)
+      return a.due.localeCompare(b.due);
+
+    return (a.created||"").localeCompare(b.created||"");
+
+  });
+
+
+  $("list").innerHTML=arr.length ?
+
+    arr.map(t=>{
+
+      const [c,label]=classify(t);
+
+      return `
+
+<div class="task ${c} ${t.done?"done":""}">
+
+<div class="row">
+
+<div>
+
+<div class="title">${esc(t.title)}</div>
+
+<span class="badge">${label}</span>
+
+</div>
+
+<button onclick="toggleTask('${t.id}')">
+${t.done?"未完了":"完了"}
+</button>
+
+</div>
+
+<div class="meta">
+
+${t.due?"締切："+esc(t.due)+"　":""}
+
+${t.mins?"所要："+esc(t.mins)+"分　":""}
+
+${t.project?"案件："+esc(t.project):""}
+
+</div>
+
+${t.note?
+`<div class="meta">${esc(t.note)}</div>`
+:""}
+
+<div class="actions">
+
+<button onclick="removeTask('${t.id}')">
+削除
+</button>
+
+</div>
+
+</div>
+
+`;
+
+    }).join("")
+
+    :
+
+    '<div class="empty">該当するタスクはありません</div>';
+
+
+  $("total").textContent=tasks.length;
+
+  $("open").textContent=tasks.filter(t=>!t.done).length;
+
+  $("done").textContent=tasks.filter(t=>t.done).length;
+
+
+  document.querySelectorAll(".tab").forEach(b=>
+    b.classList.toggle("active",b.dataset.filter===filter)
+  );
+
 }
-function toggle(id){let t=tasks.find(x=>x.id===id);t.done=!t.done;save()}function removeTask(id){if(confirm("このタスクを削除しますか？")){tasks=tasks.filter(x=>x.id!==id);save()}}
-function clearDone(){if(confirm("完了済みタスクを削除しますか？")){tasks=tasks.filter(x=>!x.done);save()}}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function exportCSV(){let h=["タスク","締切","所要分","依頼必要","長期","プロジェクト","メモ","完了","作成日時"];let rows=tasks.map(t=>[t.title,t.due,t.mins,t.delegate,t.long,t.project,t.note,t.done?"完了":"未完了",t.created]);let csv=[h,...rows].map(r=>r.map(x=>`"${String(x??"").replace(/"/g,'""')}"`).join(",")).join("\\n");let a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\\ufeff"+csv],{type:"text/csv"}));a.download="仕事タスク_"+today()+".csv";a.click()}
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{filter=b.dataset.filter;render()});$("search").oninput=render;render();
+
+
+window.toggleTask=async function(id){
+
+  const t=tasks.find(x=>x.id===id);
+
+  if(!t)return;
+
+  await updateDoc(
+
+    doc(db,"tasks",id),
+
+    {done:!t.done}
+
+  );
+
+};
+
+
+window.removeTask=async function(id){
+
+  if(!confirm("このタスクを削除しますか？"))
+    return;
+
+  await deleteDoc(doc(db,"tasks",id));
+
+};
+
+
+window.clearDone=async function(){
+
+  if(!confirm("完了済みタスクを削除しますか？"))
+    return;
+
+  const doneTasks=tasks.filter(t=>t.done);
+
+  for(const t of doneTasks){
+
+    await deleteDoc(doc(db,"tasks",t.id));
+
+  }
+
+};
+
+
+function esc(s){
+
+  return String(s).replace(
+
+    /[&<>"']/g,
+
+    m=>({
+
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+
+    }[m])
+
+  );
+
+}
+
+
+window.exportCSV=function(){
+
+  const h=[
+
+    "タスク",
+    "締切",
+    "所要分",
+    "依頼必要",
+    "長期",
+    "プロジェクト",
+    "メモ",
+    "完了",
+    "作成日時"
+
+  ];
+
+
+  const rows=tasks.map(t=>[
+
+    t.title,
+    t.due,
+    t.mins,
+    t.delegate,
+    t.long,
+    t.project,
+    t.note,
+    t.done?"完了":"未完了",
+    t.created
+
+  ]);
+
+
+  const csv=[h,...rows]
+
+    .map(r=>r.map(x=>
+
+      `"${String(x??"").replace(/"/g,'""')}"`
+
+    ).join(","))
+
+    .join("\n");
+
+
+  const a=document.createElement("a");
+
+  a.href=URL.createObjectURL(
+
+    new Blob(
+
+      ["\ufeff"+csv],
+
+      {type:"text/csv"}
+
+    )
+
+  );
+
+  a.download="仕事タスク_"+today()+".csv";
+
+  a.click();
+
+};
+
+
+document.querySelectorAll(".tab").forEach(b=>{
+
+  b.onclick=()=>{
+
+    filter=b.dataset.filter;
+
+    render();
+
+  };
+
+});
+
+
+$("search").oninput=render;
+
 </script>
-</body></html>
+
+</body>
+</html>
